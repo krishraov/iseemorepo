@@ -1,11 +1,14 @@
 package com.example.krishna.iseemo;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class StartScreen extends AppCompatActivity {
 
@@ -15,12 +18,144 @@ public class StartScreen extends AppCompatActivity {
         setContentView(R.layout.activity_start_screen);
     }
 
+
+    /**
+     * This is activated upon a button click and it uses Zxing's
+     * internal functions to open the scanner with some configurable options.
+     *
+     * @param view incoming view
+     */
     public void openScanner(View view) {
+
         IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setOrientationLocked(true);
-        integrator.setBeepEnabled(false);
-        integrator.setCaptureActivity(Scanner.class);
-        integrator.initiateScan();
+
+        integrator.setOrientationLocked(true);          // only scan in portrait (check the Manifest file too)
+        integrator.setBeepEnabled(false);               // don't beep on scan
+        integrator.setCaptureActivity(Scanner.class);   // call the Scanner activity
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);  // scan only QR codes
+        integrator.initiateScan();                      // start scanning
+
     }
+
+
+    /**
+     * After the scan has completed and the scanning activity returns,
+     * this function is invoked.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // get the result using the built-in zxing parser
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        // handle it
+        if (result != null) {
+
+            if (result.getContents() == null) {
+
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+
+            } else {
+
+                // all the magic goes here.
+                // * is the QR code from iSeeMo?
+                // * has it expired?
+                // * if the code is valid, then
+                //   * (decrypt it, if needed)
+                //   * read each field (id, num_items, initials, bitly path
+                //   * construct a proper URL from the bitly path
+                //   * depending on the id and num_items, construct the remaining URLs.
+                //   * the above point can be done in the appropriate activity
+
+                //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+
+                String qrContent = result.getContents();
+                String[] qrArray = qrContent.split(",");
+
+                String verifCode = qrArray[0];
+                String mID = qrArray[1];
+                String custInitials = qrArray[2];
+                String numItems = qrArray[3];
+                String partialURL = qrArray[4];
+
+                if (verifCode.equals("9a&r5Q*")) {
+
+                    // Recreate the correct base URL to send via an intent.
+                    // Depending on the type of media, this will be expanded in future activities.
+                    // This is not valid for phone redirects.
+                    // e.g. urlBase + image0.png
+                    //      urlBase + image1.png
+                    //      urlBase + video0.png
+                    String urlBase = "http://bitly.com/" + partialURL;
+
+                    switch (mID) {
+
+                        case "0":
+                            // image processing
+                            break;
+
+                        case "1":
+                            // audio processing
+                            break;
+
+                        case "2":
+                            // video processing
+                            break;
+
+                        case "3":
+                            // website redirect
+                            openWebPage(urlBase);
+                            break;
+
+                        case "4":
+                            // Facebook redirect
+                            break;
+
+                        default:
+                            // give error message
+                            Toast.makeText(this, "Oops! Something is wrong here", Toast.LENGTH_LONG).show();
+                            break;
+
+                    }
+
+                } else {
+
+                    // this is not an iSeeMo code OR, the ad has expired.
+                    // print a message and stay on the launch screen
+                    Toast.makeText(this, "Oops! This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+        } else {
+
+            // This is important, otherwise the result will not be passed to the fragment
+            super.onActivityResult(requestCode, resultCode, data);
+
+        }
+    }
+
+
+    /**
+     * Open a web page with a specified URL. This is done using
+     * implicit intents.
+     *
+     * @param url URL to open
+     */
+    public void openWebPage(String url) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            // what do we do here??
+        }
+    }
+
 
 }
