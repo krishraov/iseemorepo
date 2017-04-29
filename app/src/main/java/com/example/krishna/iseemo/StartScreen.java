@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 public class StartScreen extends AppCompatActivity {
 
     @Override
@@ -104,6 +106,10 @@ public class StartScreen extends AppCompatActivity {
 
                         case "2":
                             // video processing
+                            // send the URL to the video display activity.
+                            Intent myIntent = new Intent(this, VideoViewActivity.class);
+                            myIntent.putExtra(EXTRA_MESSAGE, urlBase);
+                            startActivity(myIntent);
                             break;
 
                         case "3":

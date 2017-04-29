@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">iSeeMo</string>
-    <string name="welcome_msg">Welcome to iSeeMo :) Click the button below to enter the world of magic!</string>
+    <string name="welcome_msg">Click the button to start scanning!</string>
     <string name="scan_button">Scan now!</string>
 </resources>
