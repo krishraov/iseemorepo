@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee"
+    android:background="#FFFCC4"
     tools:context="com.example.krishna.iseemo.StartScreen">
 
     <TextView
@@ -13,8 +13,8 @@
         android:layout_height="123dp"
         android:text="@string/welcome_msg"
         android:textAlignment="center"
-        android:textSize="24sp"
         android:textColor="#000"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,14 +24,20 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="115dp"
-        android:layout_height="58dp"
+        android:layout_width="144dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="8dp"
+        android:background="#00585F"
+        android:elevation="8dp"
+        android:onClick="openScanner"
         android:text="@string/scan_button"
-        android:textColor="#000"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView"
-        android:layout_marginTop="8dp"
-        android:onClick="openScanner"/>
+        tools:layout_editor_absoluteX="129dp"
+        tools:layout_editor_absoluteY="284dp" />
 
 </android.support.constraint.ConstraintLayout>
