@@ -59,7 +59,7 @@ public class StartScreen extends AppCompatActivity {
 
             if (result.getContents() == null) {
 
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Scan cancelled", Toast.LENGTH_SHORT).show();
 
             } else {
 
@@ -123,7 +123,7 @@ public class StartScreen extends AppCompatActivity {
 
                         default:
                             // give error message
-                            Toast.makeText(this, "Oops! Something is wrong here", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Oops! Something is wrong here", Toast.LENGTH_SHORT).show();
                             break;
 
                     }
@@ -132,7 +132,7 @@ public class StartScreen extends AppCompatActivity {
 
                     // this is not an iSeeMo code OR, the ad has expired.
                     // print a message and stay on the launch screen
-                    Toast.makeText(this, "Oops! This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
 
                 }
             }

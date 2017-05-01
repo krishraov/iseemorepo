@@ -24,10 +24,11 @@ public class VideoViewActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        String VideoURL = getIntent().getStringExtra(EXTRA_MESSAGE);
-
         // Get the layout from video_main.xml
         setContentView(R.layout.activity_video_view);
+
+        // extract the URL sent from the main screen activity.
+        String VideoURL = getIntent().getStringExtra(EXTRA_MESSAGE);
 
         // Find your VideoView in your video_main.xml layout
         videoview = (VideoView) findViewById(R.id.VideoView);
