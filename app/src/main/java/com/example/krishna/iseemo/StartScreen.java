@@ -77,10 +77,8 @@ public class StartScreen extends AppCompatActivity {
 
                 String qrContent = result.getContents();
 
-                // Iteratively check if the first few characters of the decoded string 
-                // is "9a&r5Q*"
-                // TODO : can we create a nested if-loop of this and break when 
-                // the condition is not met?
+                // Iteratively check if the first few characters of the decoded string are as expected 
+                // TODO : can we create a nested if-loop of this and break when the condition is not met?
 
                 boolean validCode = true;
 
@@ -116,7 +114,7 @@ public class StartScreen extends AppCompatActivity {
                 // this is not an iSeeMo code OR, the ad has expired.
                 // print a message and stay on the launch screen
                 if (validCode == false) {
-                    Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "This code has either expired or isn't an iSeeMo code!", Toast.LENGTH_LONG).show();
                 }
                 else {
 
@@ -125,7 +123,7 @@ public class StartScreen extends AppCompatActivity {
                     // What happens if there are fewer/more than 5 sections?
                     //  ... exit and declare that this is an invalid code!
                     if (qrArray.length() != 5) {
-                        Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "This code has either expired or isn't an iSeeMo code!", Toast.LENGTH_LONG).show();
                         break;
                     }
 
@@ -137,6 +135,9 @@ public class StartScreen extends AppCompatActivity {
                     String numItems     = qrArray[3];
                     String partialURL   = qrArray[4];
 
+                    Integer mIdInt      = 64 - Integer.decode("0x" + mID);
+                    Integer numItemsInt = 64 - Integer.decode("0x" + numItems);
+                    partialURL          = new StringBuilder(partialURL).reverse().toString();
 
                     // Recreate the correct base URL to send via an intent.
                     // Depending on the type of media, this will be expanded in future activities.
