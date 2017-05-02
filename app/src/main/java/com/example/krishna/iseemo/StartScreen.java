@@ -76,15 +76,67 @@ public class StartScreen extends AppCompatActivity {
                 //Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
 
                 String qrContent = result.getContents();
-                String[] qrArray = qrContent.split(",");
 
-                String verifCode = qrArray[0];
-                String mID = qrArray[1];
-                String custInitials = qrArray[2];
-                String numItems = qrArray[3];
-                String partialURL = qrArray[4];
+                // Iteratively check if the first few characters of the decoded string 
+                // is "9a&r5Q*"
+                // TODO : can we create a nested if-loop of this and break when 
+                // the condition is not met?
 
-                if (verifCode.equals("9a&r5Q*")) {
+                boolean validCode = true;
+
+                if ( validCode && qrContent.charAt(0) != '9') {
+                    validCode = false;
+                }
+
+                if ( validCode && qrContent.charAt(1) != 'a') {
+                    validCode = false;
+                }
+
+                if ( validCode && qrContent.charAt(2) != '&') {
+                    validCode = false;
+                }
+
+                if ( validCode && qrContent.charAt(3) != 'r') {
+                    validCode = false;
+                }
+                
+                if ( validCode && qrContent.charAt(4) != '5') {
+                    validCode = false;
+                }
+
+                if ( validCode && qrContent.charAt(5) != 'Q') {
+                    validCode = false;
+                }
+
+                if ( validCode && qrContent.charAt(6) != '*') {
+                    validCode = false;
+                }
+                
+
+                // this is not an iSeeMo code OR, the ad has expired.
+                // print a message and stay on the launch screen
+                if (validCode == false) {
+                    Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+                }
+                else {
+
+                    String[] qrArray = qrContent.split(",");
+
+                    // What happens if there are fewer/more than 5 sections?
+                    //  ... exit and declare that this is an invalid code!
+                    if (qrArray.length() != 5) {
+                        Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+
+                    // Split the input string to its constituent parts
+                    String verifCode    = qrArray[0];
+                    String mID          = qrArray[1];
+                    String custInitials = qrArray[2];
+                    String numItems     = qrArray[3];
+                    String partialURL   = qrArray[4];
+
 
                     // Recreate the correct base URL to send via an intent.
                     // Depending on the type of media, this will be expanded in future activities.
@@ -127,15 +179,7 @@ public class StartScreen extends AppCompatActivity {
                             break;
 
                     }
-
-                } else {
-
-                    // this is not an iSeeMo code OR, the ad has expired.
-                    // print a message and stay on the launch screen
-                    Toast.makeText(this, "This code has either expired or is not an iSeeMo code!", Toast.LENGTH_LONG).show();
-
                 }
-            }
 
         } else {
 
