@@ -82,62 +82,61 @@ public class StartScreen extends AppCompatActivity {
 
                 boolean validCode = true;
 
-                if ( validCode && qrContent.charAt(0) != '9') {
+                if (validCode && qrContent.charAt(0) != '9') {
                     validCode = false;
                 }
 
-                if ( validCode && qrContent.charAt(1) != 'a') {
+                if (validCode && qrContent.charAt(1) != 'a') {
                     validCode = false;
                 }
 
-                if ( validCode && qrContent.charAt(2) != '&') {
+                if (validCode && qrContent.charAt(2) != '&') {
                     validCode = false;
                 }
 
-                if ( validCode && qrContent.charAt(3) != 'r') {
-                    validCode = false;
-                }
-                
-                if ( validCode && qrContent.charAt(4) != '5') {
+                if (validCode && qrContent.charAt(3) != 'r') {
                     validCode = false;
                 }
 
-                if ( validCode && qrContent.charAt(5) != 'Q') {
+                if (validCode && qrContent.charAt(4) != '5') {
                     validCode = false;
                 }
 
-                if ( validCode && qrContent.charAt(6) != '*') {
+                if (validCode && qrContent.charAt(5) != 'Q') {
                     validCode = false;
                 }
-                
+
+                if (validCode && qrContent.charAt(6) != '*') {
+                    validCode = false;
+                }
+
 
                 // this is not an iSeeMo code OR, the ad has expired.
                 // print a message and stay on the launch screen
-                if (validCode == false) {
+                if (!validCode) {
                     Toast.makeText(this, "This code has either expired or isn't an iSeeMo code!", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
 
                     String[] qrArray = qrContent.split(",");
 
                     // What happens if there are fewer/more than 5 sections?
                     //  ... exit and declare that this is an invalid code!
-                    if (qrArray.length() != 5) {
+                    if (qrArray.length != 5) {
                         Toast.makeText(this, "This code has either expired or isn't an iSeeMo code!", Toast.LENGTH_LONG).show();
-                        break;
+                        return;
                     }
 
 
                     // Split the input string to its constituent parts
-                    String verifCode    = qrArray[0];
-                    String mID          = qrArray[1];
+                    String verifCode = qrArray[0];
+                    String mID = qrArray[1];
                     String custInitials = qrArray[2];
-                    String numItems     = qrArray[3];
-                    String partialURL   = qrArray[4];
+                    String numItems = qrArray[3];
+                    String partialURL = qrArray[4];
 
-                    Integer mIdInt      = 64 - Integer.decode("0x" + mID);
+                    Integer mIdInt = 64 - Integer.decode("0x" + mID);
                     Integer numItemsInt = 64 - Integer.decode("0x" + numItems);
-                    partialURL          = new StringBuilder(partialURL).reverse().toString();
+                    partialURL = new StringBuilder(partialURL).reverse().toString();
 
                     // Recreate the correct base URL to send via an intent.
                     // Depending on the type of media, this will be expanded in future activities.
@@ -147,30 +146,34 @@ public class StartScreen extends AppCompatActivity {
                     //      urlBase + video0.png
                     String urlBase = "http://bitly.com/" + partialURL;
 
-                    switch (mID) {
+                    switch (mIdInt) {
 
-                        case "0":
+                        case 0:
                             // image processing
+                            // send the URL to the image display activity.
+                            Intent imageIntent = new Intent(this, ImageViewActivity.class);
+                            imageIntent.putExtra(EXTRA_MESSAGE, urlBase);
+                            startActivity(imageIntent);
                             break;
 
-                        case "1":
+                        case 1:
                             // audio processing
                             break;
 
-                        case "2":
+                        case 2:
                             // video processing
                             // send the URL to the video display activity.
-                            Intent myIntent = new Intent(this, VideoViewActivity.class);
-                            myIntent.putExtra(EXTRA_MESSAGE, urlBase);
-                            startActivity(myIntent);
+                            Intent videoIntent = new Intent(this, VideoViewActivity.class);
+                            videoIntent.putExtra(EXTRA_MESSAGE, urlBase);
+                            startActivity(videoIntent);
                             break;
 
-                        case "3":
+                        case 3:
                             // website redirect
                             openWebPage(urlBase);
                             break;
 
-                        case "4":
+                        case 4:
                             // Facebook redirect
                             break;
 
@@ -181,6 +184,7 @@ public class StartScreen extends AppCompatActivity {
 
                     }
                 }
+            }
 
         } else {
 

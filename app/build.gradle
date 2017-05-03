@@ -32,4 +32,8 @@ dependencies {
     // for scanning QR codes
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
 
+    // for downloading and caching images
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
+
 }
