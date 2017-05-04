@@ -13,7 +13,8 @@
         android:theme="@style/AppTheme">
 
         <!-- Start screen's settings. -->
-        <activity android:name=".StartScreen">
+        <activity android:name=".StartScreen"
+            android:configChanges="screenSize|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
