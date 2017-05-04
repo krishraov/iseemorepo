@@ -136,7 +136,6 @@ public class StartScreen extends AppCompatActivity {
 
                     Integer mIdInt = 64 - Integer.decode("0x" + mID);
                     Integer numItemsInt = 64 - Integer.decode("0x" + numItems);
-                    partialURL = new StringBuilder(partialURL).reverse().toString();
 
                     // Recreate the correct base URL to send via an intent.
                     // Depending on the type of media, this will be expanded in future activities.
@@ -144,7 +143,10 @@ public class StartScreen extends AppCompatActivity {
                     // e.g. urlBase + image0.png
                     //      urlBase + image1.png
                     //      urlBase + video0.png
-                    String urlBase = "http://bitly.com/" + partialURL;
+                    // change this if we switch to CloudFront (put it's domain here)
+                    partialURL           = new StringBuilder(partialURL).reverse().toString();
+                    final String initURL = "https://s3.ap-south-1.amazonaws.com/iseemo-testing/";
+                    final String urlBase = initURL + partialURL;
 
                     switch (mIdInt) {
 
@@ -163,9 +165,17 @@ public class StartScreen extends AppCompatActivity {
                         case 2:
                             // video processing
                             // send the URL to the video display activity.
-                            Intent videoIntent = new Intent(this, VideoViewActivity.class);
-                            videoIntent.putExtra(EXTRA_MESSAGE, urlBase);
-                            startActivity(videoIntent);
+                            //Intent videoIntent = new Intent(this, VideoViewActivity.class);
+                            //videoIntent.putExtra(EXTRA_MESSAGE, urlBase);
+                            //startActivity(videoIntent);
+
+                            // This technique uses implicit intents and uses
+                            // the inbuilt and user-preferred video player
+                            // to playback the video.
+                            Uri video = Uri.parse(urlBase + "/video1.mp4");
+                            Intent intent = new Intent(Intent.ACTION_VIEW, video);
+                            intent.setDataAndType(video, "video/mp4");
+                            startActivity(Intent.createChooser(intent, "Watch this video using "));
                             break;
 
                         case 3:
