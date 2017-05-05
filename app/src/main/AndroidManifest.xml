@@ -13,10 +13,12 @@
         android:theme="@style/AppTheme">
 
         <!-- Start screen's settings. -->
-        <activity android:name=".StartScreen"
+        <activity
+            android:name=".StartScreen"
             android:configChanges="screenSize|keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,8 +38,8 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <!-- Image display screen's settings. -->
-        <activity android:name=".ImageViewActivity"></activity>
-
+        <activity android:name=".ImageDisplayActivity"
+            android:configChanges="screenSize|orientation" />
 
     </application>
 

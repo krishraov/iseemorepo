@@ -153,8 +153,9 @@ public class StartScreen extends AppCompatActivity {
                         case 0:
                             // image processing
                             // send the URL to the image display activity.
-                            Intent imageIntent = new Intent(this, ImageViewActivity.class);
-                            imageIntent.putExtra(EXTRA_MESSAGE, urlBase);
+                            Intent imageIntent = new Intent(this, ImageDisplayActivity.class);
+                            imageIntent.putExtra("BASE_URL", urlBase);
+                            imageIntent.putExtra("NUM_ITEMS", numItemsInt);
                             startActivity(imageIntent);
                             break;
 
