@@ -10,8 +10,6 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
 public class StartScreen extends AppCompatActivity {
 
     @Override
@@ -144,7 +142,7 @@ public class StartScreen extends AppCompatActivity {
                     //      urlBase + image1.png
                     //      urlBase + video0.png
                     // change this if we switch to CloudFront (put it's domain here)
-                    partialURL           = new StringBuilder(partialURL).reverse().toString();
+                    partialURL = new StringBuilder(partialURL).reverse().toString();
                     final String initURL = "https://s3.ap-south-1.amazonaws.com/iseemo-testing/";
                     final String urlBase = initURL + partialURL;
 
