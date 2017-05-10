@@ -1,7 +1,5 @@
 package com.example.krishna.iseemo;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import com.journeyapps.barcodescanner.CaptureActivity;

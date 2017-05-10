@@ -1,81 +1,70 @@
 package com.example.krishna.iseemo;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.widget.ImageView;
-import android.widget.ViewFlipper;
 
-import com.bumptech.glide.Glide;
+import com.example.krishna.iseemo.fragments.ImageGridFragment;
+import com.example.krishna.iseemo.fragments.ImagePagerFragment;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-//import com.squareup.picasso.Picasso;
 
 public class ImageDisplayActivity extends AppCompatActivity {
 
-    private ViewFlipper mViewFlipper;
-    private GestureDetector mGestureDetector;
-
+    public static String[] IMAGES;
+    public static String baseURL = "";
+    public static Integer numImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_display);
 
-        // Get the ViewFlipper
-        mViewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-
-        final String baseURL = getIntent().getStringExtra("BASE_URL");
-        final Integer numImages = getIntent().getIntExtra("NUM_ITEMS", 1);
-        String[] urlArray = new String[numImages];
+        // this is needed because the ImageDisplayActivity can be called
+        // by the ImagePagerFragment.
+        if (baseURL == "") {
+            baseURL = getIntent().getStringExtra("BASE_URL");
+            numImages = getIntent().getIntExtra("NUM_ITEMS", 1);
+        }
 
         // set up all the image URLs
         // create dynamic image view and add them to ViewFlipper
-        for (int i = 0; i < urlArray.length; i++) {
-            urlArray[i] = baseURL + "/image" + (i + 1) + ".jpeg";
-            ImageView image = new ImageView(getApplicationContext());
-            Glide.with(this).load(urlArray[i]).into(image);
-            mViewFlipper.addView(image);
+        IMAGES = new String[numImages];
+        for (int i = 0; i < IMAGES.length; i++) {
+            IMAGES[i] = baseURL + "/image" + (i + 1) + ".jpg";
         }
 
-        // Set in/out flipping animations
-        mViewFlipper.setInAnimation(this, android.R.anim.fade_in);
-        mViewFlipper.setOutAnimation(this, android.R.anim.fade_out);
+        int frIndex = getIntent().getIntExtra(Constants.Extra.FRAGMENT_INDEX, 0);
+        Fragment fr;
+        String tag;
 
-        CustomGestureDetector customGestureDetector = new CustomGestureDetector();
-        mGestureDetector = new GestureDetector(this, customGestureDetector);
+        switch (frIndex) {
+            default:
+            case ImageGridFragment.INDEX:
+                tag = ImageGridFragment.class.getSimpleName();
+                fr = getSupportFragmentManager().findFragmentByTag(tag);
+                if (fr == null) {
+                    fr = new ImageGridFragment();
+                }
+                break;
+            case ImagePagerFragment.INDEX:
+                tag = ImagePagerFragment.class.getSimpleName();
+                fr = getSupportFragmentManager().findFragmentByTag(tag);
+                if (fr == null) {
+                    fr = new ImagePagerFragment();
+                    fr.setArguments(getIntent().getExtras());
+                }
+                break;
+        }
 
+        getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fr, tag).commit();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mGestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
+    public void onBackPressed() {
+        ImageLoader.getInstance().stop();
+        super.onBackPressed();
     }
-
-
-    /**
-     * This provides the user with gesture control.
-     */
-    private class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-            // Swipe left (next)
-            if (e1.getX() > e2.getX()) {
-                mViewFlipper.showNext();
-            }
-
-            // Swipe right (previous)
-            if (e1.getX() < e2.getX()) {
-                mViewFlipper.showPrevious();
-            }
-
-            return super.onFling(e1, e2, velocityX, velocityY);
-        }
-    }
-
 }
 
 

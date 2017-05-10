@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.krishna.iseemo.fragments.ImageGridFragment;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -154,6 +155,7 @@ public class StartScreen extends AppCompatActivity {
                             Intent imageIntent = new Intent(this, ImageDisplayActivity.class);
                             imageIntent.putExtra("BASE_URL", urlBase);
                             imageIntent.putExtra("NUM_ITEMS", numItemsInt);
+                            imageIntent.putExtra(Constants.Extra.FRAGMENT_INDEX, ImageGridFragment.INDEX);
                             startActivity(imageIntent);
                             break;
 
@@ -163,11 +165,6 @@ public class StartScreen extends AppCompatActivity {
 
                         case 2:
                             // video processing
-                            // send the URL to the video display activity.
-                            //Intent videoIntent = new Intent(this, VideoViewActivity.class);
-                            //videoIntent.putExtra(EXTRA_MESSAGE, urlBase);
-                            //startActivity(videoIntent);
-
                             // This technique uses implicit intents and uses
                             // the inbuilt and user-preferred video player
                             // to playback the video.
@@ -179,7 +176,7 @@ public class StartScreen extends AppCompatActivity {
 
                         case 3:
                             // website redirect
-                            openWebPage(urlBase);
+                            openWebPage(partialURL);
                             break;
 
                         case 4:
@@ -208,10 +205,11 @@ public class StartScreen extends AppCompatActivity {
      * Open a web page with a specified URL. This is done using
      * implicit intents.
      *
-     * @param url URL to open
+     * @param partialURL URL to open
      */
-    public void openWebPage(String url) {
+    private void openWebPage(String partialURL) {
 
+        final String url = "http://bit.ly/" + partialURL;
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 
         if (intent.resolveActivity(getPackageManager()) != null) {
