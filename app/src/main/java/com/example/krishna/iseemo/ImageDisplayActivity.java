@@ -33,7 +33,7 @@ public class ImageDisplayActivity extends AppCompatActivity {
         for (int i = 0; i < IMAGES.length; i++) {
             IMAGES[i] = baseURL + "/image" + (i + 1) + ".jpg";
         }
-
+        
         int frIndex = getIntent().getIntExtra(Constants.Extra.FRAGMENT_INDEX, 0);
         Fragment fr;
         String tag;
